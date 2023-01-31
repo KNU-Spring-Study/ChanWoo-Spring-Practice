@@ -42,4 +42,9 @@ public class User {
     @Enumerated(value = EnumType.STRING) // 열거형(Enum)의 이름을 String 타입으로 저장
     @Builder.Default // builder 패턴을 사용할 때 해당 필드의 값을 지정하지 않으면 null이 아닌 아래의 값이 default
     private Membership membership = Membership.BASIC;
+
+    // CollectionUserRepository 사용 시 필요
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
