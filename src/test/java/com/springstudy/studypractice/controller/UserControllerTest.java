@@ -108,4 +108,23 @@ class UserControllerTest {
         //then
         resultActions.andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("회원가입 실패 - Validation 에러")
+    void signUpRequestDtoValidationError() throws Exception {
+        //given
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .username(" ")
+                .password("woopaca")
+                .build();
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post(URI_PREFIX + "/sign-up")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(signUpRequestDto)))
+                .andDo(print());
+
+        //then
+        resultActions.andExpect(status().isBadRequest());
+    }
 }
