@@ -13,8 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 // lombok을 사용하면 반복되는 코드를 줄일 수 있고, 필드를 추가할 때 getter, setter, 생성자를 수정하지 않아도 되어 편리한 기능이다.
@@ -36,9 +38,11 @@ public class User {
     private String password;
     @Email // Spring Validation - Email 형식 검증
     private String email;
+    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$") // Java 정규식을 사용한 전화번호 형식 검증
     private String phone;
     @Min(value = 14) // Spring Validation - 최소 14 이상이어야 한다.
-    private int age;
+    @Max(value = 120) // Spring Validation - 최대 120 이하여야 한다.
+    private Integer age;
     @Enumerated(value = EnumType.STRING) // 열거형(Enum)의 이름을 String 타입으로 저장
     @Builder.Default // builder 패턴을 사용할 때 해당 필드의 값을 지정하지 않으면 null이 아닌 아래의 값이 default
     private Membership membership = Membership.BASIC;
