@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
 import com.springstudy.studypractice.controller.dto.WithdrawalRequestDto;
+import com.springstudy.studypractice.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,6 +27,9 @@ class UserControllerTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
+
+    @MockBean
+    UserService userService;
 
     public static final String URI_PREFIX = "/api/v1/users";
 

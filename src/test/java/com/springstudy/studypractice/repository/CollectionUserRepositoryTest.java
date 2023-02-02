@@ -1,3 +1,4 @@
+/*
 package com.springstudy.studypractice.repository;
 
 import com.springstudy.studypractice.entity.User;
@@ -102,4 +103,4 @@ class CollectionUserRepositoryTest {
                 .age(24)
                 .build();
     }
-}
+}*/

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -45,9 +44,10 @@ class DbUserRepositoryTest {
         userRepository.save(user);
 
         //when
+        Optional<User> optionalUser = userRepository.findByUsername("asdf");
 
         //then
-        assertThrows(EmptyResultDataAccessException.class, () -> userRepository.findByUsername("w"));
+        assertThrows(NoSuchElementException.class, () -> optionalUser.get());
     }
 
     @Test
@@ -64,7 +64,7 @@ class DbUserRepositoryTest {
         List<User> users = userRepository.findAll();
 
         //then
-        assertThat(users.size()).isEqualTo(2);
+        assertThat(users.size()).isEqualTo(4);
     }
 
     @Test

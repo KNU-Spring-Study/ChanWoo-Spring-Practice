@@ -1,5 +1,7 @@
 package com.springstudy.studypractice.entity;
 
+import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
+import com.springstudy.studypractice.controller.dto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +52,24 @@ public class User {
     // CollectionUserRepository 사용 시 필요
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public static User of(SignUpRequestDto signUpRequestDto) {
+        return User.builder()
+                .username(signUpRequestDto.getUsername())
+                .password(signUpRequestDto.getPassword())
+                .email(signUpRequestDto.getEmail())
+                .phone(signUpRequestDto.getPhone())
+                .age(signUpRequestDto.getAge())
+                .build();
+    }
+
+    public UserInfoResponseDto toDto() {
+        return UserInfoResponseDto.builder()
+                .username(this.username)
+                .email(this.email)
+                .phone(this.phone)
+                .age(this.age)
+                .build();
     }
 }

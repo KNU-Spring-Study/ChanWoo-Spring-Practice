@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
@@ -40,9 +41,14 @@ public class DbUserRepository implements UserRepository {
         Query query = entityManager.createQuery(
                 "SELECT u FROM User u WHERE u.username = :username");
 
-        Object findUser = query.setParameter("username", username).getSingleResult();
+        Object findUser;
+        try {
+            findUser = query.setParameter("username", username).getSingleResult();
+        } catch (NoResultException e) {
+            findUser = null;
+        }
         User user = (User) findUser;
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     @Override

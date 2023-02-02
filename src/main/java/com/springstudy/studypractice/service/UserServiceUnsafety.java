@@ -1,0 +1,98 @@
+package com.springstudy.studypractice.service;
+
+import com.springstudy.studypractice.controller.dto.SignInRequestDto;
+import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
+import com.springstudy.studypractice.controller.dto.UserInfoResponseDto;
+import com.springstudy.studypractice.controller.dto.WithdrawalRequestDto;
+import com.springstudy.studypractice.entity.User;
+import com.springstudy.studypractice.exception.UserAuthException;
+import com.springstudy.studypractice.exception.error.UserValidError;
+import com.springstudy.studypractice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class UserServiceUnsafety implements UserService {
+
+    private final UserRepository userRepository;
+
+    @Override
+    @Transactional
+    public Long joinUser(@Valid final SignUpRequestDto signUpRequestDto) {
+        User user = checkUsernameDuplicate(signUpRequestDto);
+
+        User savedUser = userRepository.save(user);
+        return savedUser.getId();
+    }
+
+    @Override
+    public Long signInUser(final SignInRequestDto signInRequestDto) {
+        User user = usernameAndPasswordValidate(signInRequestDto, null);
+        return user.getId();
+    }
+
+    @Override
+    public UserInfoResponseDto userInfo(final String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserAuthException(UserValidError.USERNAME_NOT_FOUND));
+
+        return user.toDto();
+    }
+
+    @Override
+    public List<UserInfoResponseDto> allUsersInfo() {
+        List<UserInfoResponseDto> allUsersInfo = new ArrayList<>();
+        userRepository.findAll().forEach(user -> allUsersInfo.add(user.toDto()));
+
+        return allUsersInfo;
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(final WithdrawalRequestDto withdrawalRequestDto) {
+        User user = usernameAndPasswordValidate(null, withdrawalRequestDto);
+        userRepository.delete(user);
+    }
+
+    private User checkUsernameDuplicate(final SignUpRequestDto signUpRequestDto) {
+        String username = signUpRequestDto.getUsername();
+        userRepository.findByUsername(username)
+                .ifPresent(user -> {
+                    throw new UserAuthException(UserValidError.DUPLICATE_USERNAME);
+                });
+
+        return User.of(signUpRequestDto);
+    }
+
+    private User usernameAndPasswordValidate(@Nullable final SignInRequestDto signInRequestDto,
+                                             @Nullable final WithdrawalRequestDto withdrawalRequestDto) {
+        String username = null;
+        String password = null;
+
+        if (signInRequestDto != null) {
+            username = signInRequestDto.getUsername();
+            password = signInRequestDto.getPassword();
+        }
+        if (withdrawalRequestDto != null) {
+            username = withdrawalRequestDto.getUsername();
+            password = withdrawalRequestDto.getPassword();
+        }
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserAuthException(UserValidError.USERNAME_NOT_FOUND));
+
+        if (!user.getPassword().equals(password)) {
+            throw new UserAuthException(UserValidError.INVALID_PASSWORD);
+        }
+
+        return user;
+    }
+}
