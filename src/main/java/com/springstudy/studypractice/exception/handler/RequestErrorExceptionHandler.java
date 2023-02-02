@@ -1,4 +1,4 @@
-package com.springstudy.studypractice.exception;
+package com.springstudy.studypractice.exception.handler;
 
 import com.springstudy.studypractice.exception.dto.ErrorResponseDto;
 import org.slf4j.Logger;
@@ -6,34 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
-public class UserExceptionHandler {
+public class RequestErrorExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-
-    @ExceptionHandler(UserAuthException.class)
-    protected ResponseEntity<ErrorResponseDto> userAuthExceptionHandler(
-            UserAuthException e, HttpServletRequest request) {
-        log.error("Message = {}", e.getUserValidError().getMessage());
-
-        return createResponseEntity(
-                e.getUserValidError().getHttpStatus(), e.getUserValidError().getMessage(), request
-        );
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponseDto> fieldValidationExceptionHandler(
-            MethodArgumentNotValidException e, HttpServletRequest request) {
-        log.error("Message = {}", e.getFieldError().getDefaultMessage());
-
-        return createResponseEntity(HttpStatus.BAD_REQUEST, e.getFieldError().getDefaultMessage(), request);
-    }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<ErrorResponseDto> jsonParseExceptionHandler(HttpServletRequest request) {
@@ -42,6 +24,18 @@ public class UserExceptionHandler {
         log.error("Message = {}", message);
 
         return createResponseEntity(HttpStatus.BAD_REQUEST, message, request);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    protected ResponseEntity<ErrorResponseDto> requestMethodErrorExceptionHandler(
+            HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
+        log.error("메서드 Error");
+        
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        String method = e.getMethod();
+        String message = "'" + method + "' 메서드를 지원하지 않습니다.";
+
+        return createResponseEntity(status, message, request);
     }
 
     private ResponseEntity<ErrorResponseDto> createResponseEntity(
