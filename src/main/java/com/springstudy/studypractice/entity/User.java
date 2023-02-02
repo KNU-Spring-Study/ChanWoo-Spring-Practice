@@ -70,6 +70,7 @@ public class User {
                 .email(this.email)
                 .phone(this.phone)
                 .age(this.age)
+                .membership(membership)
                 .build();
     }
 }
