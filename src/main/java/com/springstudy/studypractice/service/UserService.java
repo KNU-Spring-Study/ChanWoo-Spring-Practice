@@ -3,7 +3,7 @@ package com.springstudy.studypractice.service;
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
 import com.springstudy.studypractice.controller.dto.UserInfoResponseDto;
-import com.springstudy.studypractice.controller.dto.WithdrawalRequestDto;
+import com.springstudy.studypractice.controller.dto.WithdrawRequestDto;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface UserService {
 
     List<UserInfoResponseDto> allUsersInfo();
 
-    void deleteUser(final WithdrawalRequestDto withdrawalRequestDto);
+    void deleteUser(final WithdrawRequestDto withdrawRequestDto);
 }

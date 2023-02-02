@@ -3,7 +3,7 @@ package com.springstudy.studypractice.service;
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
 import com.springstudy.studypractice.controller.dto.UserInfoResponseDto;
-import com.springstudy.studypractice.controller.dto.WithdrawalRequestDto;
+import com.springstudy.studypractice.controller.dto.WithdrawRequestDto;
 import com.springstudy.studypractice.entity.User;
 import com.springstudy.studypractice.exception.UserAuthException;
 import com.springstudy.studypractice.exception.error.UserValidError;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserServiceUnsafety implements UserService {
 
@@ -57,8 +56,8 @@ public class UserServiceUnsafety implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(final WithdrawalRequestDto withdrawalRequestDto) {
-        User user = usernameAndPasswordValidate(null, withdrawalRequestDto);
+    public void deleteUser(final WithdrawRequestDto withdrawRequestDto) {
+        User user = usernameAndPasswordValidate(null, withdrawRequestDto);
         userRepository.delete(user);
     }
 
@@ -73,7 +72,7 @@ public class UserServiceUnsafety implements UserService {
     }
 
     private User usernameAndPasswordValidate(@Nullable final SignInRequestDto signInRequestDto,
-                                             @Nullable final WithdrawalRequestDto withdrawalRequestDto) {
+                                             @Nullable final WithdrawRequestDto withdrawRequestDto) {
         String username = null;
         String password = null;
 
@@ -81,9 +80,9 @@ public class UserServiceUnsafety implements UserService {
             username = signInRequestDto.getUsername();
             password = signInRequestDto.getPassword();
         }
-        if (withdrawalRequestDto != null) {
-            username = withdrawalRequestDto.getUsername();
-            password = withdrawalRequestDto.getPassword();
+        if (withdrawRequestDto != null) {
+            username = withdrawRequestDto.getUsername();
+            password = withdrawRequestDto.getPassword();
         }
 
         User user = userRepository.findByUsername(username)

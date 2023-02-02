@@ -3,7 +3,7 @@ package com.springstudy.studypractice.service;
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
 import com.springstudy.studypractice.controller.dto.UserInfoResponseDto;
-import com.springstudy.studypractice.controller.dto.WithdrawalRequestDto;
+import com.springstudy.studypractice.controller.dto.WithdrawRequestDto;
 import com.springstudy.studypractice.entity.User;
 import com.springstudy.studypractice.exception.UserAuthException;
 import com.springstudy.studypractice.exception.error.UserValidError;
@@ -90,11 +90,11 @@ class UserServiceUnsafetyTest {
                 .build();
         userRepository.save(user);
 
-        WithdrawalRequestDto withdrawalRequestDto =
-                new WithdrawalRequestDto("test", "testest");
+        WithdrawRequestDto withdrawRequestDto =
+                new WithdrawRequestDto("test", "testest");
 
         //when
-        userService.deleteUser(withdrawalRequestDto);
+        userService.deleteUser(withdrawRequestDto);
 
         //then
         assertThrows(UserAuthException.class, () -> userService.userInfo("test"));
@@ -150,13 +150,13 @@ class UserServiceUnsafetyTest {
 
     @Test
     @DisplayName("회원 탈퇴 실패")
-    void withdrawalUserFail() throws Exception {
+    void withdrawUserFail() throws Exception {
         //given
-        WithdrawalRequestDto withdrawalRequestDto = new WithdrawalRequestDto("ewefsf", "woopaca");
+        WithdrawRequestDto withdrawRequestDto = new WithdrawRequestDto("ewefsf", "woopaca");
 
         //when
         UserAuthException userAuthException = assertThrows(UserAuthException.class, () ->
-                userService.deleteUser(withdrawalRequestDto));
+                userService.deleteUser(withdrawRequestDto));
 
         //then
         assertThat(userAuthException.getUserValidError().getMessage())

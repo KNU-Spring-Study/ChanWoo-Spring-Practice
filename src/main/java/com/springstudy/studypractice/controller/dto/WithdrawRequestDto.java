@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class WithdrawalRequestDto {
+public class WithdrawRequestDto {
 
     private String username;
     private String password;
