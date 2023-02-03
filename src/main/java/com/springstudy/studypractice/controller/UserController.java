@@ -52,10 +52,10 @@ public class UserController {
 
     @GetMapping("") // 파라미터로 username을 전달하면 해당 사용자의 정보, 만약 전달하지 않으면 모든 회원의 정보
     public ResponseEntity<Object> userInfo(
-            @RequestParam(required = false, defaultValue = "") final String username) {
+            @RequestParam(required = false) final String username) {
         log.info("User info request = {}", username);
 
-        if (username.isEmpty()) {
+        if (username == null) {
             List<UserInfoResponseDto> userInfoList = userService.allUsersInfo();
             return ResponseEntity.ok().body(userInfoList);
         }
