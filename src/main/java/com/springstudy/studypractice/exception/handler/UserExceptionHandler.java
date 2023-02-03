@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class UserExceptionHandler {
@@ -20,30 +22,38 @@ public class UserExceptionHandler {
     @ExceptionHandler(UserAuthException.class)
     protected ResponseEntity<ErrorResponseDto> userAuthExceptionHandler(
             UserAuthException e, HttpServletRequest request) {
-        log.error("Message = {}", e.getUserValidError().getMessage());
+        List<String> messages = new ArrayList<>();
+        messages.add(e.getUserValidError().getMessage());
+
+        log.error("Messages = {}", messages);
 
         return createResponseEntity(
-                e.getUserValidError().getHttpStatus(), e.getUserValidError().getMessage(), request
+                e.getUserValidError().getHttpStatus(), messages, request
         );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponseDto> fieldValidationExceptionHandler(
             MethodArgumentNotValidException e, HttpServletRequest request) {
-        log.error("Message = {}", e.getFieldError().getDefaultMessage());
+        List<String> messages = new ArrayList<>();
+        e.getFieldErrors().forEach((fieldError -> {
+            messages.add(fieldError.getDefaultMessage());
+        }));
 
-        return createResponseEntity(HttpStatus.BAD_REQUEST, e.getFieldError().getDefaultMessage(), request);
+        log.error("Messages = {}", messages);
+
+        return createResponseEntity(HttpStatus.BAD_REQUEST, messages, request);
     }
 
     private ResponseEntity<ErrorResponseDto> createResponseEntity(
-            HttpStatus status, String message, HttpServletRequest request) {
+            HttpStatus status, List<String> messages, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
 
         return ResponseEntity.status(status)
                 .body(ErrorResponseDto.builder()
                         .status(status.value())
                         .errorType(status.name())
-                        .message(message)
+                        .messages(messages)
                         .path(requestURI)
                         .build());
     }
