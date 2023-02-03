@@ -33,18 +33,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 값 생성 전략 -> MySQL에서 AUTO_INCREMENT인 경우 보통 IDENTITY
     @Column(name = "user_id") // 데이터베이스 테이블의 'user_id' column과 매핑
     private Long id;
+
     @NotBlank // Spring Validation - null, "", " " 모두 불가능
     @Column(unique = true) // UNIQUE 설정
     private String username;
+
     @NotBlank
     private String password;
+
     @Email // Spring Validation - Email 형식 검증
     private String email;
+
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$") // Java 정규식을 사용한 전화번호 형식 검증
     private String phone;
+
     @Min(value = 14) // Spring Validation - 최소 14 이상이어야 한다.
     @Max(value = 120) // Spring Validation - 최대 120 이하여야 한다.
     private Integer age;
+
     @Enumerated(value = EnumType.STRING) // 열거형(Enum)의 이름을 String 타입으로 저장
     @Builder.Default // builder 패턴을 사용할 때 해당 필드의 값을 지정하지 않으면 null이 아닌 아래의 값이 default
     private Membership membership = Membership.BASIC;
