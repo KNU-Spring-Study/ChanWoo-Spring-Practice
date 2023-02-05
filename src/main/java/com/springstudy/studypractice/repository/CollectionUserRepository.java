@@ -14,7 +14,6 @@ public class CollectionUserRepository implements UserRepository{
 
     // HashMap은 Thread-Safety하지 않기 때문에 동시성 문제 발생 가능, concurrentHashMap은 이를 보완
     private final Map<Long, User> store = new ConcurrentHashMap<>();
-
     private Long id = 0L;
 
     @Override

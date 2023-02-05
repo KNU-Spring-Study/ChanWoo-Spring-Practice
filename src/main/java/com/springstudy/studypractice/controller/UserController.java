@@ -28,7 +28,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @PostMapping("/sign-up")

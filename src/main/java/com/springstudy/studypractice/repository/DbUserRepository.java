@@ -17,7 +17,6 @@ public class DbUserRepository implements UserRepository {
 
     @PersistenceContext
     private final EntityManager entityManager;
-
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     public DbUserRepository(EntityManager entityManager) {
