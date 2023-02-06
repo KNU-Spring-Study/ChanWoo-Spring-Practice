@@ -53,6 +53,10 @@ public class JwtUtils {
 
     public String resolveToken(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
+        if (authorization == null) {
+            return authorization;
+        }
+
         if (!authorization.startsWith("Bearer ")) {
             throw new InvalidTokenException(TokenValidError.AUTHORIZATION_HEADER_PREFIX_ERROR);
         }
