@@ -1,7 +1,12 @@
 package com.springstudy.studypractice.config.jwt;
 
+import com.springstudy.studypractice.exception.InvalidTokenException;
+import com.springstudy.studypractice.exception.error.TokenValidError;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,9 +15,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Date;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
@@ -41,5 +49,26 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        if (!authorization.startsWith("Bearer ")) {
+            throw new InvalidTokenException(TokenValidError.AUTHORIZATION_HEADER_PREFIX_ERROR);
+        }
+
+        String token = authorization.split(" ")[1];
+        log.info("token = {}", token);
+        return token;
+    }
+
+    public boolean validateToken(String token) {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token);
+
+            return !claims.getBody()
+                    .getExpiration()
+                    .before(new Date());
     }
 }

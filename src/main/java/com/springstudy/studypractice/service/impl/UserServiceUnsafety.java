@@ -1,4 +1,4 @@
-package com.springstudy.studypractice.service;
+package com.springstudy.studypractice.service.impl;
 
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
@@ -8,6 +8,7 @@ import com.springstudy.studypractice.entity.User;
 import com.springstudy.studypractice.exception.UserAuthException;
 import com.springstudy.studypractice.exception.error.UserValidError;
 import com.springstudy.studypractice.repository.UserRepository;
+import com.springstudy.studypractice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;

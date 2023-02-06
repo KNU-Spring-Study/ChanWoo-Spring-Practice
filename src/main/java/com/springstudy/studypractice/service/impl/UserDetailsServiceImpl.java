@@ -1,4 +1,4 @@
-package com.springstudy.studypractice.service;
+package com.springstudy.studypractice.service.impl;
 
 import com.springstudy.studypractice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

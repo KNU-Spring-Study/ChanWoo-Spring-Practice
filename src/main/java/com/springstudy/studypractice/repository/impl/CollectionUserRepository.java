@@ -1,6 +1,7 @@
-package com.springstudy.studypractice.repository;
+package com.springstudy.studypractice.repository.impl;
 
 import com.springstudy.studypractice.entity.User;
+import com.springstudy.studypractice.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 //@Repository
-public class CollectionUserRepository implements UserRepository{
+public class CollectionUserRepository implements UserRepository {
 
     // HashMap은 Thread-Safety하지 않기 때문에 동시성 문제 발생 가능, concurrentHashMap은 이를 보완
     private final Map<Long, User> store = new ConcurrentHashMap<>();

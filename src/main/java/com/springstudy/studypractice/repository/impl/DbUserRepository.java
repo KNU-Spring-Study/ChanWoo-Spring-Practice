@@ -1,6 +1,7 @@
-package com.springstudy.studypractice.repository;
+package com.springstudy.studypractice.repository.impl;
 
 import com.springstudy.studypractice.entity.User;
+import com.springstudy.studypractice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
