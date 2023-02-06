@@ -39,4 +39,6 @@ public class SignUpRequestDto {
         this.phone = phone;
         this.age = age;
     }
+
+
 }

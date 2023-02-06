@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -26,6 +27,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,13 +75,18 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public static User of(SignUpRequestDto signUpRequestDto) {
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public static User of(SignUpRequestDto signUpRequestDto, PasswordEncoder passwordEncoder) {
         return User.builder()
                 .username(signUpRequestDto.getUsername())
-                .password(signUpRequestDto.getPassword())
+                .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
                 .email(signUpRequestDto.getEmail())
                 .phone(signUpRequestDto.getPhone())
                 .age(signUpRequestDto.getAge())
+                .roles(Collections.singletonList("ROLE_USER"))
                 .build();
     }
 

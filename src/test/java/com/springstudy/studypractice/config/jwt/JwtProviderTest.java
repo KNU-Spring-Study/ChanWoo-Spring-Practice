@@ -26,7 +26,7 @@ class JwtProviderTest {
         roles.add("ADMIN");
 
         //when
-        String token = jwtProvider.createToken("woopaca", roles);
+        String token = jwtProvider.createToken(1000L, "woopaca", roles);
 
         //then
         log.info("token = {}", token);

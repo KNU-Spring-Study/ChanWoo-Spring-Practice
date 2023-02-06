@@ -45,8 +45,10 @@ public class UserController {
     public ResponseEntity<String> signIn(@RequestBody final SignInRequestDto signInRequestDto) {
         log.info("Sign In request = {}", signInRequestDto);
 
-        Long signInUserId = userService.signInUser(signInRequestDto);
-        return ResponseEntity.ok().body("Sign-In Success! User number = " + signInUserId);
+        String token = userService.signInUser(signInRequestDto);
+
+        return ResponseEntity.ok().header("Set-Cookie", "Authorization=" + token)
+                .body("Sign-In Success!");
     }
 
     @GetMapping("") // 파라미터로 username을 전달하면 해당 사용자의 정보, 만약 전달하지 않으면 모든 회원의 정보
