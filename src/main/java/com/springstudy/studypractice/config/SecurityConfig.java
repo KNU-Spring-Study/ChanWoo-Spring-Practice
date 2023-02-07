@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 애플리케이션에 들어오는 요청에 대한 사용 권한을 검증
                 .antMatchers("/api/v1/users/sign-in", "/api/v1/users/sign-up").permitAll() // 해당 경로에 대해서는 모두에게 허용
-                .antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/**").hasRole("USER")
                 .anyRequest().hasRole("ADMIN") // 기타 요청(및 경로)는 인증된 권한을 가진 사용자에게 허용
                 .and()
                 // 권한을 확인하는 과정에서 통과하지 못하는 예외가 발생할 경우, 예외를 전달 -> CustomAccessDeniedHandler

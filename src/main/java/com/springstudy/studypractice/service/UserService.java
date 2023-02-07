@@ -13,7 +13,7 @@ public interface UserService {
 
     String signInUser(final SignInRequestDto signInRequestDto);
 
-    UserInfoResponseDto userInfo(final String username);
+    UserInfoResponseDto userInfo(final String user);
 
     List<UserInfoResponseDto> allUsersInfo();
 

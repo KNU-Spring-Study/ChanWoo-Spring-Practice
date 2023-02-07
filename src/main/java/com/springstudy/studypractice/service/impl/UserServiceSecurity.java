@@ -82,9 +82,11 @@ public class UserServiceSecurity implements UserService {
     }
 
     @Override
-    public UserInfoResponseDto userInfo(String token) {
-
-        return null;
+    public UserInfoResponseDto userInfo(String authorization) {
+        String token = authorization.split(" ")[1];
+        Object principal = jwtUtils.getAuthentication(token).getPrincipal();
+        User user = (User) principal;
+        return user.toDto();
     }
 
     @Override

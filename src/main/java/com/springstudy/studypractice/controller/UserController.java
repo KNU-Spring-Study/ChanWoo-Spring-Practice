@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -50,17 +49,10 @@ public class UserController {
         return ResponseEntity.ok().body(token);
     }
 
-    @GetMapping("") // 파라미터로 username을 전달하면 해당 사용자의 정보, 만약 전달하지 않으면 모든 회원의 정보
+    @GetMapping("")
     public ResponseEntity<Object> userInfo(
-            @RequestParam(required = false) final String username) {
-        log.info("User info request = {}", username);
-
-        if (username == null) {
-            List<UserInfoResponseDto> userInfoList = userService.allUsersInfo();
-            return ResponseEntity.ok().body(userInfoList);
-        }
-
-        UserInfoResponseDto userInfoResponseDto = userService.userInfo(username);
+            @RequestHeader(value = "Authorization") String authorization) {
+        UserInfoResponseDto userInfoResponseDto = userService.userInfo(authorization);
         return ResponseEntity.ok().body(userInfoResponseDto);
     }
 
