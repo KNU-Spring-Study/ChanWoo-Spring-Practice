@@ -47,8 +47,7 @@ public class UserController {
 
         String token = userService.signInUser(signInRequestDto);
 
-        return ResponseEntity.ok().header("Set-Cookie", "Authorization=" + token)
-                .body("Sign-In Success!");
+        return ResponseEntity.ok().body(token);
     }
 
     @GetMapping("") // 파라미터로 username을 전달하면 해당 사용자의 정보, 만약 전달하지 않으면 모든 회원의 정보

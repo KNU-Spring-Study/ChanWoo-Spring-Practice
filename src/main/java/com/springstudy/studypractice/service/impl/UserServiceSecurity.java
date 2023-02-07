@@ -1,6 +1,7 @@
 package com.springstudy.studypractice.service.impl;
 
 import com.springstudy.studypractice.config.jwt.JwtProvider;
+import com.springstudy.studypractice.config.jwt.JwtUtils;
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
 import com.springstudy.studypractice.controller.dto.UserInfoResponseDto;
@@ -25,6 +26,7 @@ public class UserServiceSecurity implements UserService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     private final String TOKEN_PREFIX = "Bearer ";
 
@@ -80,7 +82,8 @@ public class UserServiceSecurity implements UserService {
     }
 
     @Override
-    public UserInfoResponseDto userInfo(String username) {
+    public UserInfoResponseDto userInfo(String token) {
+
         return null;
     }
 

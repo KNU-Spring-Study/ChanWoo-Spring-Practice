@@ -1,13 +1,12 @@
 package com.springstudy.studypractice.config.jwt;
 
-import com.springstudy.studypractice.exception.InvalidTokenException;
-import com.springstudy.studypractice.exception.error.TokenValidError;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,13 +51,14 @@ public class JwtUtils {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorization == null) {
-            return authorization;
+            return null;
         }
 
+        log.info("resolveToken 시작");
         if (!authorization.startsWith("Bearer ")) {
-            throw new InvalidTokenException(TokenValidError.AUTHORIZATION_HEADER_PREFIX_ERROR);
+            throw new IllegalArgumentException();
         }
 
         String token = authorization.split(" ")[1];

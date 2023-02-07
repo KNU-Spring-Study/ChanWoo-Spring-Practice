@@ -19,7 +19,7 @@ public class JwtProvider {
 
     @Value("${jwt.secret}")
     private String secretKey;
-    private final Long tokenExpireMs = 1_000 * 60 * 60L;
+    private final Long tokenExpireMs = 1_000 * 60L;
 
     @PostConstruct // 빈으로 등록하기 위해 생성하기 직전에 수행
     public void init() {
