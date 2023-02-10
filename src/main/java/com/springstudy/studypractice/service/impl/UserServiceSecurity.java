@@ -12,7 +12,10 @@ import com.springstudy.studypractice.exception.error.UserValidError;
 import com.springstudy.studypractice.repository.UserRepository;
 import com.springstudy.studypractice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,7 @@ public class UserServiceSecurity implements UserService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final String TOKEN_PREFIX = "Bearer ";
 
@@ -49,7 +53,8 @@ public class UserServiceSecurity implements UserService {
         return User.of(signUpRequestDto, passwordEncoder);
     }
 
-    @Override
+
+    /*@Override
     public String signInUser(SignInRequestDto signInRequestDto) {
         User user = usernameAndPasswordValidate(signInRequestDto, null);
 
@@ -79,7 +84,34 @@ public class UserServiceSecurity implements UserService {
         }
 
         return user;
+    }*/
+
+    @Override
+    public String signInUser(SignInRequestDto signInRequestDto) {
+        String username = signInRequestDto.getUsername();
+        String password = signInRequestDto.getPassword();
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(username, password);
+
+        Authentication authentication;
+        try {
+            authentication = authenticationManagerBuilder.getObject()
+                    .authenticate(authenticationToken);
+        } catch (AuthenticationException e) {
+            throw new UserAuthException(UserValidError.INVALID_USERNAME_PASSWORD);
+        }
+
+        User user = null;
+        if (authentication.isAuthenticated()) {
+            user = (User) authentication.getPrincipal();
+        }
+
+        assert user != null;
+        String token = jwtProvider.createToken(user.getId(), user.getUsername(), user.getRoles());
+        return TOKEN_PREFIX + token;
     }
+
 
     @Override
     public UserInfoResponseDto userInfo(String authorization) {

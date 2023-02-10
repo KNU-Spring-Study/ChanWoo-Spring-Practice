@@ -88,10 +88,10 @@ public class UserServiceUnsafety implements UserService {
         }
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserAuthException(UserValidError.USERNAME_NOT_FOUND));
+                .orElseThrow(() -> new UserAuthException(UserValidError.INVALID_USERNAME_PASSWORD));
 
         if (!user.getPassword().equals(password)) {
-            throw new UserAuthException(UserValidError.INVALID_PASSWORD);
+            throw new UserAuthException(UserValidError.INVALID_USERNAME_PASSWORD);
         }
 
         return user;

@@ -66,7 +66,7 @@ public class JwtUtils {
         return token;
     }
 
-    public boolean validateToken(String token) {
+    public boolean isNotExpired(String token) {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token);
