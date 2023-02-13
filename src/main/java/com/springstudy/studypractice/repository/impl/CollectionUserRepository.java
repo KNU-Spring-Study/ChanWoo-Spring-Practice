@@ -58,10 +58,4 @@ public class CollectionUserRepository implements UserRepository {
     public void delete(User user) {
         store.remove(user.getId());
     }
-
-    // 테스트에서 사용하는 메서드
-    @Override
-    public void reset() {
-        store.clear();
-    }
 }
