@@ -1,9 +1,9 @@
-package com.springstudy.studypractice.repository;
+package com.springstudy.studypractice.repository.impl;
 
 import com.springstudy.studypractice.entity.User;
+import com.springstudy.studypractice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -12,12 +12,11 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class DbUserRepository implements UserRepository {
 
     @PersistenceContext
     private final EntityManager entityManager;
-
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     public DbUserRepository(EntityManager entityManager) {
@@ -61,10 +60,5 @@ public class DbUserRepository implements UserRepository {
     @Override
     public void delete(User user) {
         entityManager.remove(user);
-    }
-
-    @Override
-    public void reset() {
-        log.warn("This method is for testing purposes only.");
     }
 }

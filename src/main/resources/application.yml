@@ -19,3 +19,6 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
     org.springframework.transaction: trace
+
+jwt:
+  secret: SpringStudySecretKey

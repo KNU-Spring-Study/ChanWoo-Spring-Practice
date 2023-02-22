@@ -11,9 +11,9 @@ public interface UserService {
 
     Long joinUser(final SignUpRequestDto signUpRequestDto);
 
-    Long signInUser(final SignInRequestDto signInRequestDto);
+    String signInUser(final SignInRequestDto signInRequestDto);
 
-    UserInfoResponseDto userInfo(final String username);
+    UserInfoResponseDto userInfo(final String user);
 
     List<UserInfoResponseDto> allUsersInfo();
 

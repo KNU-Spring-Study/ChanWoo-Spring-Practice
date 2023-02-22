@@ -1,4 +1,4 @@
-package com.springstudy.studypractice.service;
+package com.springstudy.studypractice.service.impl;
 
 import com.springstudy.studypractice.controller.dto.SignInRequestDto;
 import com.springstudy.studypractice.controller.dto.SignUpRequestDto;
@@ -8,16 +8,16 @@ import com.springstudy.studypractice.entity.User;
 import com.springstudy.studypractice.exception.UserAuthException;
 import com.springstudy.studypractice.exception.error.UserValidError;
 import com.springstudy.studypractice.repository.UserRepository;
+import com.springstudy.studypractice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class UserServiceUnsafety implements UserService {
 
@@ -33,9 +33,10 @@ public class UserServiceUnsafety implements UserService {
     }
 
     @Override
-    public Long signInUser(final SignInRequestDto signInRequestDto) {
+    public String signInUser(final SignInRequestDto signInRequestDto) {
         User user = usernameAndPasswordValidate(signInRequestDto, null);
-        return user.getId();
+//        return user.getId();
+        return "";
     }
 
     @Override
@@ -68,7 +69,8 @@ public class UserServiceUnsafety implements UserService {
                     throw new UserAuthException(UserValidError.DUPLICATE_USERNAME);
                 });
 
-        return User.of(signUpRequestDto);
+//        return User.of(signUpRequestDto);
+        return new User();
     }
 
     private User usernameAndPasswordValidate(@Nullable final SignInRequestDto signInRequestDto,
@@ -86,10 +88,10 @@ public class UserServiceUnsafety implements UserService {
         }
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserAuthException(UserValidError.USERNAME_NOT_FOUND));
+                .orElseThrow(() -> new UserAuthException(UserValidError.INVALID_USERNAME_PASSWORD));
 
         if (!user.getPassword().equals(password)) {
-            throw new UserAuthException(UserValidError.INVALID_PASSWORD);
+            throw new UserAuthException(UserValidError.INVALID_USERNAME_PASSWORD);
         }
 
         return user;
